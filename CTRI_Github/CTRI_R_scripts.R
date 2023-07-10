@@ -1,5 +1,5 @@
-#****************************************************Script - 1************************************************************************************
-#* Downloaded all the records from the CTRI registry
+#******************************************************************Script - 1**************************************************************************************************************
+#Downloaded all the records from the CTRI registry
 
 libraries = c( "XML","robotstxt", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
 lapply(libraries, require, character.only = TRUE)
@@ -51,7 +51,7 @@ for (i in seq_along(ids)) {
 
 
 
-#*********************************************Script - 2*******************************************************************************************
+#**************************************************************************Script - 2*******************************************************************************************
 #Web-scraped all the downloaded records for the field 'Type of study' and 'Type of trial'
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
@@ -116,9 +116,8 @@ for (i in seq_along(ids)) {
 
 
 
-#*************************************************Script - 3**************************************************************************************
+#**************************************************************************Script - 3****************************************************************************************
 #Web-scraped for the field 'Post Graduate Thesis' and 'Countries of recruitment' from the list of filtered records.
-
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
 lapply(libraries, require, character.only = TRUE)
@@ -181,17 +180,10 @@ for (row in 1:nrow(ids)) {
     
     counter = counter + 1
     print(paste("Count = ", counter,"ID = ",i))
-    
-    
-    
-  }
-  
+     }
 }
-
-
-#*************************************************Script - 4**********************************************************************************************************
+#***********************************************************************Script - 4**********************************************************************************************************
 #Web scraped for the field 'Details of Principal Investigator or overall Trial Coordinator (multi-center study)' and ‘Sites of study’ from the list of filtered records
-
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
 lapply(libraries, require, character.only = TRUE)
@@ -244,10 +236,6 @@ for (row in 1:nrow(ids)) {
     PI_Fax <- paste0(var,PI_Fax)
     PI_Email <- ctri_page %>% html_nodes("tr:nth-child(11) tr:nth-child(7) td+ td") %>% html_text() %>% str_remove_all('\"') %>% str_remove_all("\r") %>% str_remove_all("\t") %>% str_remove_all("\n") %>% toString() %>% str_trim() %>% str_squish()
     PI_Email <- new_function(PI_Email)
-    
-    
-    
-    
     num2=1
     for (num1 in 3:96){
       Site_PI_Name <- ctri_page %>% html_nodes(paste0("tr:nth-child(18) tr:nth-child(",num1,") td:nth-child(",num2,")")) %>% html_text() %>% str_remove_all('\"') %>% str_remove_all("\r") %>% str_remove_all("\t") %>% str_remove_all("\n") %>% toString() %>% str_trim() %>% str_squish()
