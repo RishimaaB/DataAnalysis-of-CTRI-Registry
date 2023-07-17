@@ -1,57 +1,4 @@
-#******************************************************************Script - 1**************************************************************************************************************
-#Downloaded all the records from the CTRI registry
-
-libraries = c( "XML","robotstxt", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
-lapply(libraries, require, character.only = TRUE)
-counter=0
-new_function <- function(a) {
-  
-  if (length(a) == 0) {
-    a <- "NA"
-  } else if (a == "") {
-    a <- "NA"
-  } else {
-    return(a)
-  }
-}
-
-#-- Step1: Downloading all the CTRI Webpages in HTML.
-ids = c(1:160000)
-for (i in seq_along(ids)) {
-  myurl = paste0("http://ctri.nic.in/Clinicaltrials/pmaindet2.php?trialid=", ids[i]) 
-  url = url(paste0("http://ctri.nic.in/Clinicaltrials/pmaindet2.php?trialid=",ids[i]))
-  ctri_page = read_html(url)
-  keyword = ctri_page %>% html_nodes("td") %>% html_text() %>% str_extract("Invalid Request")
-  keyword = toString(keyword)
-  ##This is done because there are many records which have their particular links, but no content is present in those records. Instead it is displayed as "Invalid Request".
-  if (keyword != "Invalid Request") { 
-    myfile = paste0("ctri_page",ids[i],".html")
-    download.file(myurl, destfile = myfile, quiet = TRUE)
-    time_of_download = as.character(timestamp())
-    reg_num <- ctri_page %>% html_nodes("td tr:nth-child(1) td+ td > b") %>% html_text() %>% str_squish() %>% str_trim()
-    reg_num <- toString(reg_num)
-    reg_num <- new_function(reg_num)   
-    time_stamp = data.frame(Trial_ID = as.character(ids[i]),
-                            downloaded_time = time_of_download,
-                            URL = as.character(myurl),reg_num)
-    
-    write.table(time_stamp, "time_stamp_ctri.csv", sep = ",",row.names = FALSE, col.names = !file.exists("time_stamp_ctri.csv"), append = T)
-    
-    counter = counter + 1
-    print(paste("Count = ", counter,"ID = ",ids[i]))
-  }
-  else {
-    
-    file <- data.frame(Trial_ID=as.character(ids[i]),URL=as.character(myurl))
-    write.table(file, "time_stamp_ctri_invalid.csv", sep = ",",row.names = FALSE, col.names = !file.exists("time_stamp_ctri_invalid.csv"), append = T)
-    
-    print(paste("Count=",counter,"ID = ",ids[i],"but page is invalid one"))
-  }
-}
-
-
-
-#**************************************************************************Script - 2*******************************************************************************************
+#***********************************************************************Script - 1*******************************************************************************************
 #Web-scraped all the downloaded records for the field 'Type of study' and 'Type of trial'
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
@@ -116,7 +63,7 @@ for (i in seq_along(ids)) {
 
 
 
-#**************************************************************************Script - 3****************************************************************************************
+#************************************************************************Script - 2****************************************************************************************
 #Web-scraped for the field 'Post Graduate Thesis' and 'Countries of recruitment' from the list of filtered records.
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
@@ -182,7 +129,7 @@ for (row in 1:nrow(ids)) {
     print(paste("Count = ", counter,"ID = ",i))
      }
 }
-#***********************************************************************Script - 4**********************************************************************************************************
+#***********************************************************************Script - 3**********************************************************************************************************
 #Web scraped for the field 'Details of Principal Investigator or overall Trial Coordinator (multi-center study)' and ‘Sites of study’ from the list of filtered records
 
 libraries = c( "XML", "tidyft","data.table", "DBI", "httr", "RSQLite","tidyverse","rvest","stringr","robotstxt","selectr","xml2","dplyr","forcats","magrittr","tidyr","ggplot2","lubridate","tibble","purrr","googleLanguageR","cld2")
