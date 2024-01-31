@@ -3,5 +3,5 @@ Clinical trials conducted in India have been criticized on several counts over t
 
 For this project, we used R-script to obtain all clinical trial records from the CTRI registry, followed by web-scraping for the needed information and filtering the pertinent data using MS-Excel tools.
 
-This folder contains the R-script required for web scraping the desired information and few python scripts for cleaning and analyzing the data.
+This folder contains the R-script required for web scraping the desired information and python scripts for cleaning and analyzing the data.
 
